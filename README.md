@@ -16,9 +16,10 @@ StoreFlow AI turns existing standard retail CCTV/RTSP security camera feeds into
 ---
 
 ## 📂 Key Artifacts
-- **[Pitch Deck (PPTX)](StoreFlow_AI_Pitch_Deck.pptx)** — High-fidelity 18-slide executive pitch deck.
-- **[Interactive Deck (HTML)](presentation.html)** — Premium interactive dark-mode HTML presentation.
-- **[Light Interactive Deck (HTML)](presentation_light.html)** — Clean corporate light-mode HTML presentation.
+- **[Interactive Deck (Dark Mode)](presentation.html)** — Premium interactive 18-slide HTML presentation.
+- **[Interactive Deck (Light Mode)](presentation_light.html)** — Clean corporate light-mode HTML presentation.
+- **[Deck Generator Script](create_presentation_deck.py)** — Python automation script to generate the 18-slide PowerPoint deck (`.pptx`).
+- **[Light Deck Generator Script](generate_light_deck.py)** — Script for light-themed presentation generation.
 - **[Complete Technical Architecture](solution.md)** — Production-grade system design, MTMC pipeline, and benchmarks.
 - **[Problem Statement & Constraints](problem%20statement.md)** — In-depth breakdown of hackathon requirements.
 
