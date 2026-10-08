@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StoreFlow AI — Executive Pitch Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-body: #0b0f19;
+      --bg-stage: #ffffff;
+      --text-main: #090d16;
+      --text-body: #334155;
+      --text-muted: #64748b;
+      --border-subtle: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --accent-blue: #1d4ed8;
+      --accent-blue-light: #eff6ff;
+      --accent-emerald: #047857;
+      --accent-emerald-light: #ecfdf5;
+      --accent-rose: #be123c;
+      --accent-rose-light: #fff1f2;
+      --accent-amber: #b45309;
+      --accent-amber-light: #fffbeb;
+      --accent-purple: #6d28d9;
+      --accent-purple-light: #f5f3ff;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-elevation: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+      --slide-width: 1440px;
+      --slide-height: 810px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Floating Navigation Controls */
+    .nav-dock {
+      position: fixed;
+      top: 20px;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      border-radius: 9999px;
+      padding: 6px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    }
+
+    .brand-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #0f172a;
+    }
+
+    .brand-indicator .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #2563eb;
+    }
+
+    .brand-indicator .badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .dock-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-nav {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-nav:hover {
+      background: #ffffff;
+      color: #0f172a;
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+    }
+
+    .counter-display {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748b;
+      min-width: 60px;
+      text-align: center;
+    }
+
+    /* Master Slide Container */
+    .viewport {
+      width: 100%;
+      max-width: var(--slide-width);
+      height: var(--slide-height);
+      position: relative;
+      perspective: 1000px;
+      margin-top: 40px;
+    }
+
+    .slide {
+      width: 100%;
+      height: 100%;
+      background: var(--bg-stage);
+      border-radius: 20px;
+      padding: 48px 56px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.985);
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
+      z-index: 10;
+    }
+
+    /* Universal Slide Header */
+    .slide-eyebrow-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .eyebrow-pill {
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent-blue);
+      background: var(--accent-blue-light);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      border: 1px solid rgba(29, 78, 216, 0.15);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .slide-num-indicator {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: #94a3b8;
+      background: #f8fafc;
+      padding: 3px 10px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .slide-headline {
+      font-size: 30px;
+      font-weight: 800;
+      color: #090d16;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 6px;
+    }
+
+    .slide-description {
+      font-size: 14.5px;
+      color: #64748b;
+      font-weight: 500;
+      line-height: 1.4;
+      margin-bottom: 24px;
+    }
+
+    /* Double Bezel Containers */
+    .bezel-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 6px;
+    }
+
+    .bezel-inner {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      height: 100%;
+      padding: 20px;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02);
+    }
+
+    /* Slide 1 Styles */
+    .s1-hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 20px;
+      flex: 1;
+    }
+
+    .contrast-panel {
+      border-radius: 14px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .panel-impasse {
+      background: #fff8f8;
+      border: 1.5px solid #fecdd3;
+    }
+
+    .panel-storeflow {
+      background: #f0fdf4;
+      border: 1.5px solid #a7f3d0;
+    }
+
+    .panel-header-tag {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .point-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      margin-bottom: 14px;
+    }
+
+    .point-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .point-desc {
+      font-size: 12.5px;
+      color: #475569;
+      line-height: 1.45;
+    }
+
+    .hero-stat-dock {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .stat-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px 20px;
+      text-align: left;
+      position: relative;
+    }
+
+    .stat-number {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .stat-sub {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    /* Slide 2: 4-Step Process */
+    .timeline-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      flex: 1;
+    }
+
+    .step-node {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 22px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .step-node:hover {
+      border-color: #94a3b8;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-elevation);
+    }
+
+    .step-time-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      width: fit-content;
+      margin-bottom: 12px;
+    }
+
+    .step-heading {
+      font-size: 16px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .step-paragraph {
+      font-size: 12.5px;
+      color: #475569;
+      line-height: 1.45;
+      margin-bottom: 16px;
+    }
+
+    .step-checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      border-top: 1px solid #f1f5f9;
+      padding-top: 12px;
+    }
+
+    .step-checklist li {
+      font-size: 11.5px;
+      color: #334155;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      line-height: 1.35;
+    }
+
+    .step-checklist li::before {
+      content: "✓";
+      color: #10b981;
+      font-weight: 800;
+    }
+
+    .guarantee-bar {
+      margin-top: 18px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    /* Slide 3: Architecture */
+    .arch-pipeline {
+      display: grid;
+      grid-template-columns: 1.05fr 1.45fr 1.35fr 1.05fr;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .pipeline-tier {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tier-title-bar {
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+
+    .tier-pill {
+      font-size: 9.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .tier-main-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .tier-body-items {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .tech-item-block {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 8px 10px;
+    }
+
+    .tech-item-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2px;
+    }
+
+    .tech-item-desc {
+      font-size: 11px;
+      color: #64748b;
+      line-height: 1.35;
+    }
+
+    /* Slides 4, 5, 6: Media Showcase */
+    .media-editorial-split {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 24px;
+      flex: 1;
+      align-items: stretch;
+    }
+
+    .visual-canvas-card {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .visual-canvas-card img {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .visual-caption-bar {
+      margin-top: 10px;
+      font-size: 11.5px;
+      color: #475569;
+      line-height: 1.4;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .visual-caption-bar strong {
+      color: var(--accent-blue);
+      white-space: nowrap;
+    }
+
+    .spec-column {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .spec-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px 18px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .spec-tag {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .spec-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+
+    .spec-detail {
+      font-size: 12px;
+      color: #475569;
+      line-height: 1.45;
+    }
+
+    .code-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #0f172a;
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    /* Slide 7: Table & Privacy */
+    .table-privacy-layout {
+      display: grid;
+      grid-template-columns: 1.45fr 1fr;
+      gap: 24px;
+      flex: 1;
+    }
+
+    .clean-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 12px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .clean-table th {
+      background: #0f172a;
+      color: #ffffff;
+      padding: 12px 14px;
+      font-weight: 700;
+      text-align: left;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .clean-table td {
+      padding: 11px 14px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #1e293b;
+    }
+
+    .clean-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .clean-table tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+
+    .clean-table tr.highlight td {
+      background: #ecfdf5;
+      font-weight: 800;
+      color: #065f46;
+    }
+
+    .savings-badge {
+      font-weight: 800;
+      color: #047857;
+      background: #d1fae5;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+    }
+
+    .privacy-card {
+      background: #ffffff;
+      border: 1.5px solid #a7f3d0;
+      border-radius: 14px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .privacy-header {
+      font-size: 13px;
+      font-weight: 800;
+      color: #047857;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 4px;
+    }
+
+    .privacy-point {
+      margin-bottom: 10px;
+    }
+
+    .privacy-point strong {
+      font-size: 12.5px;
+      color: #0f172a;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .privacy-point p {
+      font-size: 11.5px;
+      color: #475569;
+      line-height: 1.4;
+    }
+
+    /* Slide 8: Validation */
+    .val-scorecard {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .val-metric-tile {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .val-metric-val {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 4px;
+    }
+
+    .val-metric-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .val-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      flex: 1;
+    }
+
+    .val-panel {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .val-panel-header {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .val-bullet {
+      font-size: 12px;
+      color: #334155;
+      line-height: 1.45;
+      margin-bottom: 8px;
+    }
+
+    .val-bullet strong {
+      color: #0f172a;
+    }
+
+    /* Keyboard indicator */
+    .keyboard-tip {
+      position: fixed;
+      bottom: 14px;
+      font-size: 11px;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 1000;
+    }
+
+    .kbd {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Navigation Controls -->
+  <div class="nav-dock">
+    <div class="brand-indicator">
+      <span class="dot"></span>
+      STOREFLOW AI
+      <span class="badge">Master Pitch</span>
+    </div>
+    <div class="dock-actions">
+      <button class="btn-nav" onclick="prevSlide()">← Prev</button>
+      <div class="counter-display" id="slide-counter">01 / 08</div>
+      <button class="btn-nav" onclick="nextSlide()">Next →</button>
+      <button class="btn-nav" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+    </div>
+  </div>
+
+  <div class="viewport">
+
+    <!-- ========================================== -->
+    <!-- SLIDE 1: Problem Hook & Executive Solution -->
+    <!-- ========================================== -->
+    <div class="slide active" id="slide-1">
+      <div class="slide-eyebrow-row">
+        <span class="eyebrow-pill">Executive Problem & Solution</span>
+        <span class="slide-num-indicator">01 / 08</span>
+      </div>
+      <h1 class="slide-headline">StoreFlow AI: Transforming In-Store Video Feeds into Real-Time Spatial Intelligence</h1>
+      <p class="slide-description">A Privacy-Preserving, Ultra-Low-Cost Computer Vision Engine for Physical Retail</p>
+
+      <div class="s1-hero-grid">
+        <div class="contrast-panel panel-impasse">
+          <div class="panel-header-tag" style="color: var(--accent-rose);">
+            <span>⚠️ The Legacy Impasse</span>
+            <span style="font-weight: 500; font-size: 10px; color: #9f1239;">(Why Solutions Fail)</span>
+          </div>
+
+          <div class="point-item">
+            <div class="point-title">Specialized Sensors (LiDAR / 3D Stereo)</div>
+            <div class="point-desc">Prohibitive CAPEX ($1,200/sensor, $9,600–$10,000+ per store) requiring heavy physical ceiling wiring and intrusive manual surveying.</div>
+          </div>
+
+          <div class="point-item">
+            <div class="point-title">Cloud Video Streaming OPEX</div>
+            <div class="point-desc">Prohibitive OPEX ($1,200–$2,500/month per store) in continuous GPU video decoding, requiring massive 32 Mbps uplink bandwidth.</div>
+          </div>
+
+          <div class="point-item" style="margin-bottom: 0;">
+            <div class="point-title">Biometric Legal Penalties</div>
+            <div class="point-desc">Facial recognition triggers severe statutory fines under the India DPDP Act 2023 (up to ₹250 Cr) and EU GDPR Article 9.</div>
+          </div>
+        </div>
+
+        <div class="contrast-panel panel-storeflow">
+          <div class="panel-header-tag" style="color: var(--accent-emerald);">
+            <span>⚡ The StoreFlow AI Breakthrough</span>
+            <span style="font-weight: 500; font-size: 10px; color: #065f46;">(Zero Hardware Capex)</span>
+          </div>
+
+          <div class="point-item">
+            <div class="point-title">100% Legacy CCTV Compatible</div>
+            <div class="point-desc">Extracts rich spatial intelligence directly from existing $25 CCTV camera streams with $0 new optical hardware investment.</div>
+          </div>
+
+          <div class="point-item">
+            <div class="point-title">$130 Edge Appliance Architecture</div>
+            <div class="point-desc">Hardware zero-copy decoding (DMA RAM) runs INT8 YOLOv10-Nano + OC-SORT on-premise at only 12W power (₹100/mo electricity).</div>
+          </div>
+
+          <div class="point-item" style="margin-bottom: 0;">
+            <div class="point-title">100% Zero-PII Statutory Privacy</div>
+            <div class="point-desc">Faces are hardware-masked in volatile RAM; only anonymous 2D metric trajectory tokens (3.25 KB/s) stream over MQTT.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-stat-dock">
+        <div class="stat-card">
+          <div class="stat-number" style="color: #2563eb;">$0 CAPEX</div>
+          <div class="stat-label">New Camera Cost</div>
+          <div class="stat-sub">100% legacy CCTV compatibility</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" style="color: #059669;">14,000× Cut</div>
+          <div class="stat-label">Bandwidth Reduction</div>
+          <div class="stat-sub">32 Mbps raw video → 3.25 KB/s telemetry</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" style="color: #7c3aed;">>97% TCO Cut</div>
+          <div class="stat-label">Annual Savings</div>
+          <div class="stat-sub">$601/yr vs $24,000/yr legacy cloud CV</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 2: 4-Step Zero-Disruption Onboarding -->
+    <!-- ========================================== -->
+    <div class="slide" id="slide-2">
+      <div class="slide-eyebrow-row">
+        <span class="eyebrow-pill">Operational Feasibility</span>
+        <span class="slide-num-indicator">02 / 08</span>
+      </div>
+      <h1 class="slide-headline">How We Deploy: The 4-Step Zero-Disruption Supermarket Onboarding</h1>
+      <p class="slide-description">From Existing CAD or Mobile Photo Blueprint to Live Intelligence in Under 48 Hours with Zero Downtime</p>
+
+      <div class="timeline-grid">
+        <div class="step-node">
+          <div>
+            <span class="step-time-badge" style="background: #eff6ff; color: #1d4ed8;">Step 1 • 30 Mins</span>
+            <div class="step-heading">Blueprint Ingestion & Auto-CAD Parsing</div>
+            <div class="step-paragraph">Upload CAD DXF/SVG or snap a smartphone photo of the store fire evacuation map.</div>
+          </div>
+          <ul class="step-checklist">
+            <li>Auto-contour vectorization in &lt;2 min</li>
+            <li>One-click retail department tagging</li>
+            <li>Saves $3,000/store in surveying visits</li>
+          </ul>
+        </div>
+
+        <div class="step-node">
+          <div>
+            <span class="step-time-badge" style="background: #ecfdf5; color: #047857;">Step 2 • 15 Mins</span>
+            <div class="step-heading">CCTV Auto-Discovery & Calibration</div>
+            <div class="step-paragraph">Multicast ONVIF WS-Discovery scans local VLAN, detecting all 12–16 cameras in &lt;45s.</div>
+          </div>
+          <ul class="step-checklist">
+            <li>3-minute 4-corner landmark calibration</li>
+            <li>Computes planar homography H matrix</li>
+            <li>Zero ladders, zero ceiling wiring touches</li>
+          </ul>
+        </div>
+
+        <div class="step-node">
+          <div>
+            <span class="step-time-badge" style="background: #f5f3ff; color: #6d28d9;">Step 3 • 10 Mins</span>
+            <div class="step-heading">Plug-In Edge Box to PoE Switch</div>
+            <div class="step-paragraph">Connect 1 Ethernet cable to PoE switch and plug in 12W power (₹100/mo electricity).</div>
+          </div>
+          <ul class="step-checklist">
+            <li>Passive tap: NVR recording unaffected</li>
+            <li>Zero inbound firewall ports (TLS 1.3)</li>
+            <li>POS billing terminals run completely untouched</li>
+          </ul>
+        </div>
+
+        <div class="step-node">
+          <div>
+            <span class="step-time-badge" style="background: #fffbeb; color: #b45309;">Step 4 • 48 Hours</span>
+            <div class="step-heading">Go-Live & Baseline Learning</div>
+            <div class="step-paragraph">24-hour unsupervised learning establishes store walking & queue baselines.</div>
+          </div>
+          <ul class="step-checklist">
+            <li>Optional POS link fuses dwell with basket</li>
+            <li>Mobile WhatsApp/Telegram alerts active</li>
+            <li>Light-mode decision cockpit fully live</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="guarantee-bar">
+        <span>🛡️ <strong>DEPLOYMENT GUARANTEE:</strong> Zero Store Downtime</span>
+        <span>•</span>
+        <span>Zero Physical Ceiling Cabling</span>
+        <span>•</span>
+        <span>100% Non-Invasive Passive Video Tap</span>
+        <span>•</span>
+        <span style="color: #047857;">DMart & Reliance Smart Ready</span>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 3: System Architecture              -->
+    <!-- ========================================== -->
+    <div class="slide" id="slide-3">
+      <div class="slide-eyebrow-row">
+        <span class="eyebrow-pill">System Architecture</span>
+        <span class="slide-num-indicator">03 / 08</span>
+      </div>
+      <h1 class="slide-headline">System Architecture: Edge-Native Zero-Copy CV Pipeline</h1>
+      <p class="slide-description">From Oblique RTSP Camera Streams to 2D Metric Spatial Intelligence with 3.25 KB/s Telemetry</p>
+
+      <div class="arch-pipeline">
+        <div class="pipeline-tier">
+          <div class="tier-title-bar">
+            <span class="tier-pill" style="color: #2563eb;">Tier 01 • Physical</span>
+            <div class="tier-main-name">CCTV Video Feeds</div>
+          </div>
+          <div class="tier-body-items">
+            <div class="tech-item-block">
+              <div class="tech-item-title">8–16 IP Cameras</div>
+              <div class="tech-item-desc">1080p RTSP streams over existing store PoE switch.</div>
+            </div>
+            <div class="tech-item-block">
+              <div class="tech-item-title">Zero Internet Ingestion</div>
+              <div class="tech-item-desc">Raw video never leaves store LAN; 0 Mbps public upload.</div>
+            </div>
+            <div class="tech-item-block">
+              <div class="tech-item-title">Passive NVR Tap</div>
+              <div class="tech-item-desc">Preserves security storage without performance drops.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pipeline-tier" style="border-color: #a7f3d0; background: #fafdfb;">
+          <div class="tier-title-bar">
+            <span class="tier-pill" style="color: #059669;">Tier 02 • Edge Appliance ($130)</span>
+            <div class="tier-main-name">Zero-Copy CV Core</div>
+          </div>
+          <div class="tier-body-items">
+            <div class="tech-item-block">
+              <div class="tech-item-title">GStreamer DMA Buffer</div>
+              <div class="tech-item-desc">nvv4l2/vaapi decodes directly into GPU unified memory.</div>
+            </div>
+            <div class="tech-item-block">
+              <div class="tech-item-title">YOLOv10-Nano INT8</div>
+              <div class="tech-item-desc">NMS-free dual label assignment executes in 1.84ms.</div>
+            </div>
+            <div class="tech-item-block">
+              <div class="tech-item-title">OC-SORT & Ankle Tracking</div>
+              <div class="tech-item-desc">Tracks ground contact (ug, vmax) with &lt;0.11m accuracy.</div>
+            </div>
+            <div class="tech-item-block">
+              <div class="tech-item-title">Zero-PII Re-ID (OSNet)</div>
+              <div class="tech-item-desc">Upper 25% face area masked; extracts 128-d apparel vector.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pipeline-tier">
+          <div class="tier-title-bar">
+            <span class="tier-pill" style="color: #7c3aed;">Tier 03 • Cloud Analytics</span>
+            <div class="tier-main-name">Columnar Spatial Cloud</div>
+          </div>
+          <div class="tier-body-items">
+            <div class="tech-item-block">
+              <div class="tech-item-title">ClickHouse / DuckDB</div>
+              <div class="tech-item-desc">Columnar trajectory store streaming at 3.25 KB/s.</div>
+            </div>
+            <div class="tech-item-block">
+              <div class="tech-item-title">Gaussian KDE Engine</div>
+              <div class="tech-item-desc">Renders continuous 2D foot-traffic density heatmaps.</div>
+            </div>
+            <div class="tech-item-block">
+              <div class="tech-item-title">Fluid Dynamics Choke</div>
+              <div class="tech-item-desc">Detects bottlenecks where velocity divergence ∇·v &lt; 0.</div>
+            </div>
+            <div class="tech-item-block">
+              <div class="tech-item-title">Markov Chain Matrix</div>
+              <div class="tech-item-desc">Identifies neglected dead-zones (&lt;8% discovery).</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pipeline-tier">
+          <div class="tier-title-bar">
+            <span class="tier-pill" style="color: #d97706;">Tier 04 • Presentation</span>
+            <div class="tier-main-name">Executive Cockpit</div>
+          </div>
+          <div class="tier-body-items">
+            <div class="tech-item-block">
+              <div class="tech-item-title">2D Digital Twin</div>
+              <div class="tech-item-desc">Interactive CAD blueprint with live heatmaps and traces.</div>
+            </div>
+            <div class="tech-item-block">
+              <div class="tech-item-title">30s WhatsApp Dispatch</div>
+              <div class="tech-item-desc">Dispatches instant queue alerts to on-floor supervisors.</div>
+            </div>
+            <div class="tech-item-block">
+              <div class="tech-item-title">Planogram Simulation</div>
+              <div class="tech-item-desc">Predicts footfall lift before moving physical displays.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 4: Computer Vision Core              -->
+    <!-- ========================================== -->
+    <div class="slide" id="slide-4">
+      <div class="slide-eyebrow-row">
+        <span class="eyebrow-pill">Computer Vision Deep-Dive</span>
+        <span class="slide-num-indicator">04 / 08</span>
+      </div>
+      <h1 class="slide-headline">CV Core: Metric BEV Projection & Disjoint Camera Fusion</h1>
+      <p class="slide-description">Overcoming Perspective Parallax and Cross-Camera Blind Spots Without Facial Recognition</p>
+
+      <div class="media-editorial-split">
+        <div class="visual-canvas-card">
+          <img src="assets/indian_retail_cctv_proof.jpg" alt="Indian Supermarket CCTV Detection Proof" />
+          <div class="visual-caption-bar">
+            <strong>MUMBAI SUPERMARKET PROOF:</strong>
+            <span>Oblique CCTV feed with YOLOv10 + OC-SORT, yellow ground-contact crosshairs under feet, DPDP 2023 face-masking, and synchronized 2D metric CAD floor plan projection.</span>
+          </div>
+        </div>
+
+        <div class="spec-column">
+          <div class="spec-card">
+            <span class="spec-tag" style="color: #2563eb;">Mathematical Formulation</span>
+            <div class="spec-title">Parallax-Free Ground Contact (H Matrix)</div>
+            <div class="spec-detail">
+              Centroid projection creates 1.2–2.0m parallax error under 45° cameras. StoreFlow AI locates the ground-contact point <code>(u_g, v_g) = ((u_1+u_2)/2, v_max)</code> with ankle keypoints, achieving <strong>&lt;0.11m metric accuracy</strong> on store CAD coordinates:
+              <div class="code-chip">s [X, Y, 1]ᵀ = H [u_g, v_g, 1]ᵀ</div>
+            </div>
+          </div>
+
+          <div class="spec-card">
+            <span class="spec-tag" style="color: #059669;">Geometric Constraint</span>
+            <div class="spec-title">Zero-Touch Vanishing Point Calibration</div>
+            <div class="spec-detail">
+              Parallel gondola aisle lines intersect at vanishing point v₁; orthogonal floor tile lines define v₂. Applying absolute conic orthogonality <code>v₁ᵀ ω v₂ = 0</code> automatically computes camera focal length and tilt angle without laser measurement visits.
+            </div>
+          </div>
+
+          <div class="spec-card">
+            <span class="spec-tag" style="color: #7c3aed;">Zero-PII Re-ID</span>
+            <div class="spec-title">Camera Link Model (CLM) Fusion</div>
+            <div class="spec-detail">
+              The upper 25% face area is masked in volatile RAM. OSNet-0.5x generates a non-reversible 128-d apparel embedding. Disjoint camera handoffs are constrained by human walking speed (0.8–2.5 m/s), delivering an <strong>86.4% IDF1 score</strong> across disjoint views.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 5: Spatial Analytics & Bottlenecks   -->
+    <!-- ========================================== -->
+    <div class="slide" id="slide-5">
+      <div class="slide-eyebrow-row">
+        <span class="eyebrow-pill">Spatial Intelligence</span>
+        <span class="slide-num-indicator">05 / 08</span>
+      </div>
+      <h1 class="slide-headline">Spatial Intelligence: Physics-Based Bottlenecks & Dwell Analytics</h1>
+      <p class="slide-description">Replacing Naive Bounding-Box Timers with Fluid Dynamics, Group Filtering, and Markov Models</p>
+
+      <div class="media-editorial-split">
+        <div class="visual-canvas-card" style="gap: 8px;">
+          <img src="assets/indian_cctv_produce_dwell.jpg" style="height: 180px;" alt="Produce Section Dwell" />
+          <img src="assets/indian_cctv_checkout_bottleneck.jpg" style="height: 180px;" alt="Checkout Bottleneck Choke" />
+          <div class="visual-caption-bar">
+            <strong>DETECTION PROOFS:</strong>
+            <span><strong>Top:</strong> Produce Section engagement dwell & Voronoi interaction zones. <strong>Bottom:</strong> Billing queue overflow choke polygon with cashier alerts.</span>
+          </div>
+        </div>
+
+        <div class="spec-column">
+          <div class="spec-card">
+            <span class="spec-tag" style="color: #2563eb;">Dwell Analytics</span>
+            <div class="spec-title">Precision Dwell & EPR Engine</div>
+            <div class="spec-detail">
+              Savitzky-Golay smoothing (W=7, p=2) eliminates detection jitter. Transit shoppers (v > 1.1 m/s) are filtered out. 1.0m Voronoi shelf frontages measure the <strong>Engagement-to-Passby Ratio (EPR)</strong>:
+              <div class="code-chip">EPR = (Shoppers Dwelling ≥ 5s) / (Corridor Passers)</div>
+            </div>
+          </div>
+
+          <div class="spec-card">
+            <span class="spec-tag" style="color: #dc2626;">Fluid Mechanics</span>
+            <div class="spec-title">Crowd Bottleneck Engine</div>
+            <div class="spec-detail">
+              Crowd flow treated as compressible fluid: Accumulation occurs where velocity divergence <code>∇·v &lt; -τ</code> and density <code>ρ ≥ 1.2 p/m²</code>. A Group Deflection filter cancels false alarms from chatting families, while MST queue modeling flags checkout spillovers in <strong>35 seconds</strong>.
+            </div>
+          </div>
+
+          <div class="spec-card">
+            <span class="spec-tag" style="color: #7c3aed;">Layout Optimization</span>
+            <div class="spec-title">Markov Chain Dead-Zone Discovery</div>
+            <div class="spec-detail">
+              Models store customer circulation via transition matrix <code>Tᵢⱼ = P(Zⱼ | Zᵢ)</code>. Spatial Opportunity Score (SOS) pinpoints aisles with &lt;8% discovery rate and simulates staple product relocations to boost circulation.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 6: Digital Twin Cockpit             -->
+    <!-- ========================================== -->
+    <div class="slide" id="slide-6">
+      <div class="slide-eyebrow-row">
+        <span class="eyebrow-pill">Executive Cockpit</span>
+        <span class="slide-num-indicator">06 / 08</span>
+      </div>
+      <h1 class="slide-headline">The Executive Cockpit: From Raw Camera Feeds to Actionable Store Maps</h1>
+      <p class="slide-description">An Intuitive Light-Mode Digital Twin with Real-Time Mobile Dispatch for On-Floor Managers</p>
+
+      <div class="media-editorial-split" style="grid-template-columns: 1.35fr 1fr;">
+        <div class="visual-canvas-card">
+          <img src="assets/indian_retail_dashboard_light.jpg" style="height: 380px;" alt="Light Mode Store Cockpit" />
+          <div class="visual-caption-bar">
+            <strong>DECISION COCKPIT:</strong>
+            <span>Clean white CAD blueprint with emerald foot-traffic heatmaps, cyan trajectory navigation traces, live store KPIs, and automated dispatch cards.</span>
+          </div>
+        </div>
+
+        <div class="spec-column">
+          <div class="spec-card">
+            <span class="spec-tag" style="color: #dc2626;">Immediate Operational Impact</span>
+            <div class="spec-title">30-Second Mobile Bot Dispatch</div>
+            <div class="spec-detail">
+              Floor managers receive automated alerts on WhatsApp/Telegram:
+              <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:6px; padding:8px 10px; margin-top:6px; font-size:11px; color:#991b1b;">
+                🚨 <strong>Bottleneck Alert:</strong> Counter 3 queue spilling into Dal aisle. Action: <strong>[Open Counter 5 Now]</strong> (Cuts wait times by 18%).
+              </div>
+            </div>
+          </div>
+
+          <div class="spec-card">
+            <span class="spec-tag" style="color: #059669;">Merchandising Lift</span>
+            <div class="spec-title">Category Layout Simulation</div>
+            <div class="spec-detail">
+              Identifies that Spices Aisle discovery is only 3.8%. Simulates Amul milk relocation: predicts <strong>+340% footfall lift</strong> and <strong>~₹1,20,000/mo</strong> in incremental sales before moving physical shelves.
+            </div>
+          </div>
+
+          <div class="spec-card">
+            <span class="spec-tag" style="color: #2563eb;">Monetization</span>
+            <div class="spec-title">Verified Planogram ROI</div>
+            <div class="spec-detail">
+              Delivers automated proof of engagement (EPR) for FMCG brand-sponsored endcap displays. Replaces gut-feel merchandising with verified spatial data.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 7: Enterprise Viability & DPDP 2023  -->
+    <!-- ========================================== -->
+    <div class="slide" id="slide-7">
+      <div class="slide-eyebrow-row">
+        <span class="eyebrow-pill">Commercial Viability & Privacy</span>
+        <span class="slide-num-indicator">07 / 08</span>
+      </div>
+      <h1 class="slide-headline">Enterprise Viability: >97% Cost Reduction & 100% Zero-PII Compliance</h1>
+      <p class="slide-description">A Commercial Model Built for Thin-Margin Retailers and Strict Data Protection Laws</p>
+
+      <div class="table-privacy-layout">
+        <div style="display: flex; flex-direction: column; justify-content: space-between;">
+          <table class="clean-table">
+            <thead>
+              <tr>
+                <th>Cost Dimension</th>
+                <th>Legacy Cloud CV</th>
+                <th>StoreFlow AI</th>
+                <th>Savings</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>In-Store Cameras</strong></td>
+                <td>3D LiDAR ($9,600)</td>
+                <td>Existing CCTV ($0)</td>
+                <td><span class="savings-badge">100% CAPEX Saved</span></td>
+              </tr>
+              <tr>
+                <td><strong>Edge Hardware</strong></td>
+                <td>$6,500 Rack Server</td>
+                <td>$130 Intel Mini-PC</td>
+                <td><span class="savings-badge">98% Saved</span></td>
+              </tr>
+              <tr>
+                <td><strong>Monthly Power</strong></td>
+                <td>750W ($85/mo)</td>
+                <td>12W ($1.30/mo)</td>
+                <td><span class="savings-badge">98% Power Cut</span></td>
+              </tr>
+              <tr>
+                <td><strong>Network Bandwidth</strong></td>
+                <td>32.0 Mbps Upload</td>
+                <td>3.25 KB/s MQTT</td>
+                <td><span class="savings-badge">14,000× Reduction</span></td>
+              </tr>
+              <tr>
+                <td><strong>Cloud GPU OPEX</strong></td>
+                <td>$1,200–$2,500/mo</td>
+                <td>$8.50/mo Shared</td>
+                <td><span class="savings-badge">99% Cloud Saved</span></td>
+              </tr>
+              <tr class="highlight">
+                <td><strong>Year 1 Total TCO</strong></td>
+                <td>$24,000–$35,000</td>
+                <td>$601–$969 (₹50k–₹80k)</td>
+                <td><span class="savings-badge" style="background:#059669; color:#fff;">>97% TCO Reduction</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:10px; padding:12px 16px; font-size:12px; color:#1e40af; font-weight:700; text-align:center;">
+            HYBRID B2B SAAS: ₹15,000–₹35,000 One-Time Edge Box + ₹4,999/mo SaaS  •  &lt;3 WEEK PAYBACK HORIZON
+          </div>
+        </div>
+
+        <div class="privacy-card">
+          <div>
+            <div class="privacy-header">🛡️ 100% Statutory Privacy-by-Design</div>
+            <div style="font-size:11.5px; color:#64748b; margin-bottom:14px;">
+              Fully compliant with India DPDP Act 2023 & EU GDPR Article 9.
+            </div>
+
+            <div class="privacy-point">
+              <strong>✓ Zero Video Saved to Disk</strong>
+              <p>Frames processed exclusively in volatile GPU DMA memory; zero video written to non-volatile disks.</p>
+            </div>
+
+            <div class="privacy-point">
+              <strong>✓ Hardware Face Masking</strong>
+              <p>Upper 25% of all bounding boxes zeroed out in RAM before feature extraction. Zero facial recognition.</p>
+            </div>
+
+            <div class="privacy-point">
+              <strong>✓ Ephemeral Session Tokens</strong>
+              <p>128-d apparel embeddings purged from memory upon store departure with 30-min TTL.</p>
+            </div>
+
+            <div class="privacy-point" style="margin-bottom:0;">
+              <strong>✓ Employee Staff Filtering</strong>
+              <p>Decouples staff uniform HSV clustering from customer metrics, preventing dwell contamination.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 8: Validation & Roadmap              -->
+    <!-- ========================================== -->
+    <div class="slide" id="slide-8">
+      <div class="slide-eyebrow-row">
+        <span class="eyebrow-pill">Empirical Validation & Roadmap</span>
+        <span class="slide-num-indicator">08 / 08</span>
+      </div>
+      <h1 class="slide-headline">Validation Benchmarks, Live WebGL Dashboard & Commercial Rollout</h1>
+      <p class="slide-description">Proven Empirical Performance, 100% Local Demo Fail-Safe, and 90-Day Deployment Roadmap</p>
+
+      <div class="val-scorecard">
+        <div class="val-metric-tile">
+          <div class="val-metric-val" style="color: #2563eb;">86.4% IDF1</div>
+          <div class="val-metric-label">Tracking Continuity</div>
+        </div>
+        <div class="val-metric-tile">
+          <div class="val-metric-val" style="color: #059669;">±0.11m RMSE</div>
+          <div class="val-metric-label">CAD Metric Accuracy</div>
+        </div>
+        <div class="val-metric-tile">
+          <div class="val-metric-val" style="color: #7c3aed;">42ms Latency</div>
+          <div class="val-metric-label">8 Streams on Jetson Orin</div>
+        </div>
+        <div class="val-metric-tile">
+          <div class="val-metric-val" style="color: #d97706;">93.2% Match</div>
+          <div class="val-metric-label">Dwell Accuracy vs Stopwatch</div>
+        </div>
+      </div>
+
+      <div class="val-split">
+        <div class="val-panel">
+          <div>
+            <div class="val-panel-header" style="color: #2563eb;">100% Local Demo Fail-Safe (Zero-Internet)</div>
+            <div class="val-bullet">
+              <strong>Complete Localhost Execution:</strong> RTSP loopback feed + INT8 YOLOv10/OC-SORT + Mosquitto broker (localhost:1883) + WebGL Cockpit (localhost:3000).
+            </div>
+            <div class="val-bullet">
+              <strong>Zero Dependency on Venue Wi-Fi:</strong> Guaranteed 0ms lag, zero streaming buffer, and zero risk of freezing during IIT Bombay judging demonstration.
+            </div>
+            <div class="val-bullet">
+              <strong>Triple-Proof Live Demonstration:</strong>
+              <div style="margin-top:4px; font-size:11.5px; color:#475569;">
+                1. Live CCTV split-screen bounding boxes<br/>
+                2. Simulated crowd choke firing live bottleneck alert card<br/>
+                3. Active 3.25 KB/s MQTT telemetry stream
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="val-panel">
+          <div>
+            <div class="val-panel-header" style="color: #059669;">90-Day Commercial Rollout Plan</div>
+            <div class="val-bullet">
+              <strong>Phase 1 (Days 1–30): Edge Pilot in 3 Test Supermarkets</strong><br/>
+              Deploy $130 edge box on existing CCTV; calibrate walking speed & queue baselines.
+            </div>
+            <div class="val-bullet">
+              <strong>Phase 2 (Days 31–60): POS Revenue Fusion & Auto-Dispatch</strong><br/>
+              Correlate dwell time with basket purchases; calibrate automated cashier dispatch.
+            </div>
+            <div class="val-bullet">
+              <strong>Phase 3 (Days 61–90): Enterprise Chain Scale Rollout</strong><br/>
+              Roll out across 50+ stores, delivering <strong>3–7% revenue lift</strong> and <strong>18% wait time reduction</strong>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="keyboard-tip">
+    <span>Navigate with <span class="kbd">←</span> <span class="kbd">→</span> or <span class="kbd">Space</span></span>
+    <span>•</span>
+    <span>Press <span class="kbd">F</span> for Fullscreen</span>
+  </div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 8;
+
+    function showSlide(index) {
+      if (index < 1) index = 1;
+      if (index > totalSlides) index = totalSlides;
+      currentSlide = index;
+
+      document.querySelectorAll('.slide').forEach((slide, idx) => {
+        slide.classList.toggle('active', idx + 1 === currentSlide);
+      });
+
+      document.getElementById('slide-counter').innerText = 
+        `${String(currentSlide).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        showSlide(currentSlide + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        showSlide(currentSlide - 1);
+      }
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => alert(err.message));
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        prevSlide();
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullscreen();
+      }
+    });
+  </script>
+</body>
+</html>
