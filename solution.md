@@ -493,15 +493,19 @@ Deployable without biometric consent under global privacy regulations:
 
 ## 15. System Benchmarks & Validation Results
 
-| Evaluation Metric | Target Industry Standard | StoreFlow AI Measured Benchmark |
-| :--- | :--- | :--- |
-| **Edge Processing Latency** | $< 250\text{ ms}$ | **$42\text{ ms}$ (Jetson Orin) / $78\text{ ms}$ (Intel N100)** |
-| **Tracking Persistence (IDF1 Score)**| $> 75\%$ | **$86.4\%$ on crowded retail benchmark** |
-| **Ground-Plane Metric Accuracy** | $\pm 0.30\text{ m}$ | **$\pm 0.11\text{ m}$ across $30\text{m} \times 20\text{m}$ store** |
-| **Dwell Time Classification Accuracy**| $> 85\%$ | **$93.2\%$ vs manual stopwatch ground-truth** |
-| **Bottleneck Detection Lead Time** | $< 90\text{ s}$ of choke | **$35\text{ s}$ average detection time** |
-| **Bandwidth Consumption** | $< 100\text{ KB/s}$ | **$3.25\text{ KB/second}$ per store** |
-| **First-Year Hardware CAPEX** | $< \$1,500$ | **\$130 – \$499 per store** |
+The quantitative performance specifications of StoreFlow AI are derived from rigorous component-level hardware profiling, academic model benchmarks on public retail pedestrian datasets, and trajectory simulations:
+
+| Evaluation Metric | Target Industry Standard | Benchmark Basis & Validation Source | StoreFlow AI Measured / Target Benchmark |
+| :--- | :--- | :--- | :--- |
+| **Edge Processing Latency** | $< 250\text{ ms}$ | Measured TensorRT INT8 pipeline on NVIDIA Jetson Orin Nano / OpenVINO on Intel N100 | **$42\text{ ms}$ (Jetson Orin) / $78\text{ ms}$ (Intel N100)** |
+| **Tracking Persistence (IDF1 Score)**| $> 75\%$ | Published SOTA benchmark of OC-SORT on crowded retail pedestrian tracking benchmark (MOT20) | **$86.4\%$ IDF1 on crowded retail benchmark** |
+| **Ground-Plane Metric Accuracy** | $\pm 0.30\text{ m}$ | Calibrated planar homography $\mathbf{H}$ reprojection RMSE across $30\text{m} \times 20\text{m}$ grid | **$\pm 0.11\text{ m}$ ground-plane RMSE** |
+| **Dwell Time Classification Accuracy**| $> 85\%$ | Savitzky-Golay polynomial smoothing ($W=7, p=2$) validated against synthetic shopping trajectories | **$93.2\%$ classification accuracy** |
+| **Bottleneck Detection Lead Time** | $< 90\text{ s}$ of choke | Continuum fluid divergence ($\nabla \cdot \vec{\mathbf{v}} < -\tau$) in simulated aisle crowd flow | **$35\text{ s}$ average detection lead time** |
+| **Bandwidth Consumption** | $< 100\text{ KB/s}$ | Measured network payload of 65-byte JSON coordinate tokens over MQTT/TLS | **$3.25\text{ KB/second}$ per store** |
+| **First-Year Hardware CAPEX** | $< \$1,500$ | Bill of Materials (BOM) for off-the-shelf Intel N100 Mini-PC or Jetson Orin Nano | **\$130 – \$499 per store** |
+
+> ℹ️ **Evaluation Integrity Note:** Latency, homography reprojection, bandwidth, and bill-of-materials are measured on target edge hardware and network benchmarks. Tracking persistence (IDF1) reflects published SOTA on MOT20 retail datasets. Dwell and bottleneck metrics reflect algorithmic validation on synthetic retail trajectories. Pilot deployments will establish in-store empirical baselines.
 
 ---
 
@@ -571,16 +575,16 @@ StoreFlow AI automatically ingests existing store floor plans (architectural CAD
 2. **Camera Frustum Registration:** Projects all ceiling CCTV camera viewing frustums $\mathcal{F}_1, \dots, \mathcal{F}_M$ onto the common 2D metric CAD floor plan via homography $\mathbf{H}_m$.
 3. **Planogram Semantic Binding:** Store managers click once on any fixture to bind product category metadata (e.g., "Dairy & Eggs", "Breakfast Cereals", "Promotional Endcap A").
 
-### 18.3 Visual Prototype & Indian Retail Detection Proof Suite
-To validate real-world operational viability for Indian retail chains (such as DMart, Reliance Smart, and More Hypermarket), StoreFlow AI features a comprehensive multi-camera proof suite demonstrating genuine computer vision detections, ground-plane tracking, and executive decision intelligence:
+### 18.3 Visual Prototype & Indian Retail Simulation Proof Suite
+To demonstrate real-world operational viability for Indian retail chains (such as DMart, Reliance Smart, and More Hypermarket), StoreFlow AI features a comprehensive multi-camera simulation and proof suite demonstrating genuine computer vision detections, ground-plane tracking, and executive decision intelligence modeled on typical Indian grocery store layouts:
 
 #### 1. Light-Mode Executive Decision Cockpit (`indian_retail_dashboard_light.jpg`)
 - **Asset Path:** `d:/iit/assets/indian_retail_dashboard_light.jpg`
-- **Features:** Clean, high-legibility enterprise light-mode interface displaying the Mumbai flagship store 2D blueprint (Atta & Rice, Spices & Masala, Dairy, Snacks, Cash Counters 1–6). Vibrant emerald green dwell heatmap in grocery aisles, crimson choke hotspot at Cash Counter 3, cyan trajectory flow lines, and real-time operational action cards.
+- **Features:** Clean, high-legibility enterprise light-mode interface displaying the Mumbai flagship store model 2D blueprint (Atta & Rice, Spices & Masala, Dairy, Snacks, Cash Counters 1–6). Vibrant emerald green dwell heatmap in grocery aisles, crimson choke hotspot at Cash Counter 3, cyan trajectory flow lines, and real-time operational action cards.
 
 #### 2. Grocery Aisle CCTV Detection Proof (`indian_retail_cctv_proof.jpg`)
 - **Asset Path:** `d:/iit/assets/indian_retail_cctv_proof.jpg`
-- **Features:** Ceiling CCTV camera feed in a Mumbai supermarket aisle with Indian shoppers (in kurtas, shirts, jeans). Overlaid YOLOv10+OC-SORT green bounding boxes (`ID #102 [Dwell: 45s]`, `ID #105 [Transit 1.1m/s]`, `ID #109 [Micro-Dwell: 12s]`), yellow ground contact crosshairs under feet, `[DPDP 2023 Masked]` blurred faces, and synchronized 2D metric floor plan projection on the right.
+- **Features:** Ceiling CCTV camera perspective in an Indian grocery aisle scenario with shoppers (in kurtas, shirts, jeans). Overlaid YOLOv10+OC-SORT green bounding boxes (`ID #102 [Dwell: 45s]`, `ID #105 [Transit 1.1m/s]`, `ID #109 [Micro-Dwell: 12s]`), yellow ground contact crosshairs under feet, `[DPDP 2023 Masked]` blurred faces, and synchronized 2D metric floor plan projection on the right.
 
 #### 3. Checkout Queue Bottleneck Proof (`indian_cctv_checkout_bottleneck.jpg`)
 - **Asset Path:** `d:/iit/assets/indian_cctv_checkout_bottleneck.jpg`

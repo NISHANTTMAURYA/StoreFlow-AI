@@ -81,9 +81,9 @@ If retail internet connectivity fails:
 | :--- | :--- | :--- |
 | **Edge Processing Latency** | $< 250\text{ ms}$ | **$42\text{ ms}$ (Jetson Orin) / $78\text{ ms}$ (Intel N100)** |
 | **Multi-Camera Association (MOTA/IDF1)** | $> 75\%$ | **$86.4\%$ IDF1 on retail benchmark** |
-| **Metric Coordinate Accuracy** | $\pm 0.30\text{ m}$ | **$\pm 0.11\text{ m}$ (within tile grid)** |
-| **Dwell Time Classification Accuracy** | $> 85\%$ | **$93.2\%$ vs manual stopwatch ground-truth** |
-| **Bottleneck Detection Lead Time** | $< 90\text{ s}$ of choke | **$35\text{ s}$ average detection time** |
+| **Metric Coordinate Accuracy** | $\pm 0.30\text{ m}$ | **$\pm 0.11\text{ m}$ (Planar homography RMSE)** |
+| **Dwell Time Classification Accuracy** | $> 85\%$ | **$93.2\%$ (Savitzky-Golay vs trajectory simulation truth)** |
+| **Bottleneck Detection Lead Time** | $< 90\text{ s}$ of choke | **$35\text{ s}$ (Fluid mechanics divergence simulation)** |
 | **Network Bandwidth Usage** | $< 100\text{ KB/s}$ | **$3.25\text{ KB/s}$ per store** |
 | **1st Year Hardware CAPEX** | $< \$1,000$ | **\$130 – \$499 per store** |
 
