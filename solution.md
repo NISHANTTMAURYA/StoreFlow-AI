@@ -8,6 +8,22 @@
 
 ## 1. Executive Summary & Value Proposition
 
+### Project Identity & Core Positioning
+- **Product Name:** StoreFlow AI
+- **Core Positioning:** *"Waze for the inside of a store"*
+- **Core Pitch Line:** **"We don't track customers. We track the store."**
+- **Main Tagline:** *"We don't just show where customers are. We show where the store makes them stop, where traffic breaks down, where space is being ignored, and what to change."*
+
+### The Core Operating Loop: Observe → Diagnose → Prescribe → Verify
+StoreFlow AI is built entirely around an enterprise 4-step closed-loop operating cycle:
+1. **Observe:** Ingest existing commodity CCTV feeds, extract anonymous ground-contact trajectories, and build real-time heatmaps.
+2. **Diagnose:** Detect localized friction, queue spillovers, flow drop-offs, and under-utilized dead zones.
+3. **Prescribe:** Translate spatial bottlenecks into concrete, rule-based operational action cards and layout recommendations.
+4. **Verify (Physical A/B Testing):** Compare post-intervention metrics against historical baselines to prove whether layout or operational changes delivered measurable ROI.
+
+---
+
+### The Retail Reality vs E-Commerce Gap
 Physical brick-and-mortar retail stores generate over \$25 Trillion in global commerce, yet operate essentially blind compared to e-commerce websites. While digital retailers track mouse hovers, bounce rates, and cart abandonments with millisecond precision, physical stores struggle with basic spatial operational questions:
 - *Which promotional endcaps actually stop shoppers versus those that are completely ignored?*
 - *Where do layout bottlenecks and cart chokepoints form during peak hours, driving customers to abandon carts?*
@@ -22,6 +38,22 @@ Existing commercial video analytics systems fail in physical retail because they
 3. **Bandwidth Reduction by $14,000\times$:** Raw video never leaves the store. Edge nodes extract 2D floor-plan metric coordinates and stream lightweight telemetry ($< 3.5\text{ KB/second}$ total store bandwidth) over MQTT.
 4. **100% Zero-PII Privacy-by-Design:** No facial recognition. Raw frames are processed purely in volatile DMA RAM and instantly discarded. Ephemeral, irreversible body feature vectors are purged upon store exit. Full statutory compliance with India DPDP Act 2023 and EU GDPR.
 5. **Rigorous Analytical Formulation:** Replaces naive bounding-box timers with fluid mechanics divergence ($\nabla \cdot \vec{\mathbf{v}}$) for bottleneck detection, Savitzky-Golay filtered kinetic energy for true shelf-browsing dwell time, and Markov chain transition matrices for dead-zone identification.
+
+### The Store Graph Mental Model
+StoreFlow AI models the physical store as an interconnected road network:
+
+| Retail Store Element | Road Network Analogy | StoreFlow AI Spatial Representation |
+| :--- | :--- | :--- |
+| **Customer Movement** | Vehicles | Anonymous ground-plane trajectory vectors $\mathbf{P}(t)$ |
+| **Aisles & Corridors** | Roads & Highways | Directed graph edges $\mathcal{E}_{aisles}$ with transit capacities |
+| **Store Sections / Gondolas** | Destinations / Landmarks | Graph nodes $\mathcal{V}_{zones}$ with Voronoi shelf interaction cells |
+| **Aisle Junctions** | Intersections | Multi-corridor waypoint nodes measuring routing transitions |
+| **Aisle Congestion** | Traffic Jam | Negative velocity divergence $\nabla \cdot \vec{\mathbf{v}} < 0$ & Store Friction Score |
+| **Dead Zone** | Deserted Road | Bypassed nodes with low stationary probability $\pi_k < 0.08$ |
+| **Product Dwell** | Stopping Time | Micro-dwell & macro-dwell states ($v < 0.35\text{ m/s}$) |
+| **Shopping Journey** | Travel Route | Continuous journey tokens $\mathcal{J}_k$ through store graph |
+| **Store Layout** | Road Network Topography | 2D CAD Vectorized Digital Twin Map |
+| **StoreFlow AI** | Waze for Retail | Real-time traffic, congestion alerts & layout optimization |
 
 ---
 
@@ -78,6 +110,48 @@ Existing commercial video analytics systems fail in physical retail because they
  │  └── Interactive Executive UI: WebGL / Three.js Dynamic CAD Floor Plan UI   │
  └─────────────────────────────────────────────────────────────────────────────┘
 ```
+
+### 2.1 Practical Feasibility & Implementation Blueprint (The Build-Ready Open-Source Stack)
+
+To ensure the system is **100% feasible to build, run, and demo within 24 to 48 hours** by an engineering team, StoreFlow AI is designed with a **Dual-Mode Implementation Architecture**:
+
+```
+┌───────────────────────────────────────────────────────────────────────────────────────┐
+│                      STOREFLOW AI DUAL-MODE FEASIBILITY MATRIX                        │
+├────────────────────────────┬─────────────────────────────┬────────────────────────────┤
+│ Pipeline Component         │ Mode A: Hackathon / Rapid   │ Mode B: Enterprise C++ /   │
+│                            │ Build Stack (24-48 Hours)   │ Edge-Native Appliance      │
+├────────────────────────────┼─────────────────────────────┼────────────────────────────┤
+│ 1. Video Ingestion         │ OpenCV `cv2.VideoCapture`   │ GStreamer Zero-Copy        │
+│                            │ (MP4 or RTSP, 10-15 FPS)    │ `nvv4l2decoder` / VA-API   │
+├────────────────────────────┼─────────────────────────────┼────────────────────────────┤
+│ 2. Person Detection        │ `ultralytics` YOLOv8n/v10n  │ TensorRT / OpenVINO INT8   │
+│                            │ (PyTorch / ONNX Runtime)    │ 1.84ms NMS-Free Engine     │
+├────────────────────────────┼─────────────────────────────┼────────────────────────────┤
+│ 3. Multi-Object Tracking   │ ByteTrack / OC-SORT via     │ Custom C++ OCM Tracker     │
+│                            │ `supervision` or `boxmot`   │ with observation momentum  │
+├────────────────────────────┼─────────────────────────────┼────────────────────────────┤
+│ 4. Ground-Contact Metric   │ `cv2.findHomography` with   │ Automated vanishing point  │
+│    Homography Projection   │ bottom-center `(x_mid,y2)`  │ DLT matrix (CAD in meters) │
+├────────────────────────────┼─────────────────────────────┼────────────────────────────┤
+│ 5. Zone Geofencing & Dwell │ `shapely.geometry.Polygon`  │ SIMD Ray-Casting &         │
+│                            │ with velocity threshold     │ 1.0m Voronoi frontages     │
+├────────────────────────────┼─────────────────────────────┼────────────────────────────┤
+│ 6. Spatial Bottlenecks     │ Python density window +     │ Continuum 2D fluid KDE &   │
+│                            │ Store Friction Score (0-100)│ divergence ∇ · v < 0       │
+├────────────────────────────┼─────────────────────────────┼────────────────────────────┤
+│ 7. Telemetry & Backend     │ FastAPI / WebSockets        │ Outbound MQTT / TLS 1.3    │
+│                            │ or local JSON events        │ to ClickHouse + Redis      │
+├────────────────────────────┼─────────────────────────────┼────────────────────────────┤
+│ 8. Digital Twin Dashboard  │ React + HTML5 Canvas / SVG  │ WebGL / Three.js 2D/3D     │
+│                            │ (interactive floor plan)    │ Hardware-Accelerated CAD   │
+└────────────────────────────┴─────────────────────────────┴────────────────────────────┘
+```
+
+#### Why This Is Guaranteed Feasible to Build in a Hackathon:
+1. **Zero Proprietary Dependencies:** Every module in Mode A installs via standard pip packages (`pip install ultralytics supervision opencv-python shapely fastapi uvicorn`).
+2. **Works on Any Laptop:** Can be tested on a standard MacBook or student laptop with a webcam or recorded video file; zero requirement for physical ceiling installation during development.
+3. **Graceful Escalation:** A team can code Mode A in 150 lines of Python to get a complete working end-to-end demo running on `localhost`, while pitching Mode B's INT8 TensorRT and fluid mechanics equations to technical judges to demonstrate production scalability.
 
 ---
 
@@ -253,9 +327,20 @@ where $\rho(x, y, t)$ is continuous pedestrian density, and $\vec{\mathbf{v}}(x,
 4. **Checkout Queue Spillover Vector:**
    The cash register queue is modeled via a directed Minimum Spanning Tree (MST) on stationary customers. When the tail of the tree crosses into the main circulation racetrack polygon, the system automatically alerts floor supervisors to open an additional register.
 
+### Signature Executive Metric: The Store Friction Score (0–100)
+To avoid overwhelming non-technical store managers with tensor calculus and fluid velocity equations, StoreFlow AI condenses multi-modal kinematic deviations into a single, intuitive **Store Friction Score** for every aisle and zone:
+
+$$\text{Friction}(Z_k) = \min\left(100, \; 30 \cdot \frac{\Delta \rho}{\sigma_\rho} + 30 \cdot \frac{|\Delta v|}{\sigma_v} + 20 \cdot \frac{\Delta \tau_{dwell}}{\sigma_{dwell}} + 15 \cdot \mathbf{1}_{queue} + 5 \cdot \mathcal{R}_{recurrent}\right)$$
+
+Where $\Delta \rho, \Delta v, \Delta \tau_{dwell}$ represent real-time deviations from the 24-hour historical baseline for that specific time window. The score maps to an instant RAG executive status:
+- **0–20 🟢 Healthy:** Optimal movement flow; customer transit and browsing are balanced.
+- **20–40 🟡 Watch:** Moderate density buildup or slight velocity deceleration detected.
+- **40–70 🟠 Friction:** Noticeable bottleneck; shoppers slowing down and deviating around obstacles.
+- **70–100 🔴 Critical:** Severe choke point; gridlock forming, queue spillovers, or cart blockages.
+
 ---
 
-## 10. Subsystem 8: Dead-Zone Identification & Store Layout Optimization
+## 10. Subsystem 8: Dead-Zone Identification, Flow Drop-Off & Layout Optimization
 
 ### Identifying Under-Monetized Retail Space
 Retail leases cost \$150–\$400 per sq. ft. per year. An underperforming aisle represents pure dead capital.
@@ -276,13 +361,53 @@ For every store section $k$, the system tracks:
 3. **Spatial Opportunity Score:**
    $$\text{SOS}(k) = 0.45 \cdot (1 - D(k)) + 0.35 \cdot (1 - \text{ECR}(k)) + 0.20 \cdot \left(\frac{\text{Area}(Z_k)}{\text{Total Area}}\right)$$
 
+### Flow Drop-Off Detection
+StoreFlow AI monitors flow continuity across adjacent graph nodes. A **Flow Drop-off** occurs when a zone attracts high initial engagement or dwell, but fails to route traffic forward into connected merchandise aisles:
+$$\text{Drop-Off}(Z_i) = \text{High Traffic}(Z_i) \wedge \text{High Dwell}(Z_i) \wedge \left(\sum_{j \in \text{Downstream}} T_{ij} < \theta_{continuity}\right)$$
+This diagnoses promotional displays or bulky endcaps that stall customer journeys without funneling shoppers onward into deeper grocery aisles.
+
+### Contextual Causal Attribution ("Why Does a Problem Happen?")
+Computer vision can detect *where* and *when* traffic chokes, but cannot infer causality in isolation. StoreFlow AI achieves defensible causal explanations by fusing CV kinematics with manager-configured store metadata:
+- **Fixture Metadata Overlay:** Managers configure promotional displays, gondola dimensions, endcap islands, and register queues on the digital twin map.
+- **Rule-Based Causal Hints:** When a bottleneck co-locates with a temporary promotional stack, StoreFlow AI generates a defensible operational diagnosis:
+  - *"Diagnosis: Congestion overlaps temporary festive oil stack (Promo Island A). Corridor width reduced from 2.2m to 1.1m during peak hours."*
+  - *"Prescription: Test orienting display longitudinally or shift 1.5m north toward the secondary corridor."*
+
 ### The "Magnet Product" Flow Recommender
 When an area is flagged with $\text{SOS}(k) > 75$, the engine runs a Markov perturbation simulation:
 It identifies high-demand staple categories (e.g., Milk, Eggs, Bread with $D > 0.75$) and calculates predicted traffic redistribution if an anchor staple is relocated adjacent to the dead zone. The dashboard provides managers with concrete ROI estimates: *"Relocating Category X will expose 480 additional shoppers/day to Dead Zone Y, generating estimated \$14,500/mo incremental basket revenue."*
 
 ---
 
-## 11. Subsystem 9: Edge-Cloud Topology, Telemetry Streaming & Cost Optimization
+## 11. Subsystem 9: Physical Store A/B Testing & Layout Experimentation (Before vs After)
+
+To complete the **Observe → Diagnose → Prescribe → Verify** loop, StoreFlow AI provides an integrated **Layout Experimentation Engine** that allows retailers to A/B test physical store floor modifications just like digital web pages:
+
+```
+[ Day 1 - 7: Baseline Period ] ──► Compute Benchmark Metrics (Traffic, Avg Dwell, Friction, EPR)
+                                          │
+                                          ▼
+[ Manager Action ]             ──► Rearrange Fixture / Relocate Category / Alter Corridor Width
+                                          │
+                                          ▼
+[ Day 8 - 14: Evaluation Period]──► Collect Real-Time Telemetry under Modified Spatial Layout
+                                          │
+                                          ▼
+[ Automated Verification Report]──► Statistical Delta Comparison: Before vs After Lift
+                                    • Bottleneck Severity: -62% (Resolved)
+                                    • Dead Zone Discovery Rate: +280% (Lifted)
+                                    • Engagement-to-Passby Ratio: +18.4%
+```
+
+### Experiment Data Model & Verification Tracking
+Retailers configure an experiment with:
+- **Baseline Snapshot:** Time-stamped historical metrics across identical day-of-week and peak-hour windows.
+- **Intervention Tag:** Fixture movement, aisle widening, promotional banner change, or cashier staffing re-allocation.
+- **Verification Metrics:** Automated calculation of $\Delta \text{Friction}$, $\Delta D(k)$, $\Delta \text{EPR}_{shelf}$, and correlated POS conversion yield.
+
+---
+
+## 12. Subsystem 10: Edge-Cloud Topology, Telemetry Streaming & Cost Optimization
 
 ### The Telemetry Streaming Paradigm
 Instead of transmitting video streams to cloud servers, the edge box performs 100% of video processing locally and transmits only anonymous coordinate telemetry.
@@ -328,7 +453,7 @@ Cloud Backend: Lightweight Server ($8.50/month handles 15 stores!) ✅ (HIGHLY V
 
 ---
 
-## 12. Subsystem 10: Privacy-by-Design & Legal Compliance
+## 13. Subsystem 11: Privacy-by-Design & Legal Compliance
 
 ### Statutory Compliance Architecture
 Deployable without biometric consent under global privacy regulations:
@@ -531,7 +656,205 @@ To propose StoreFlow AI effectively to major supermarket chains (e.g., DMart, Re
 
 ---
 
-## 20. Comprehensive Academic & Industrial Reference Index
+## 20. Unified Database Schema & Production Storage Architecture
+
+To bridge edge telemetry with enterprise analytics and executive dashboards, StoreFlow AI implements a tiered, high-performance data architecture uniting **PostgreSQL** (relational business entities), **Redis** (real-time spatial pub/sub), and **ClickHouse/DuckDB** (columnar trajectory lakehouse):
+
+```
+                                 [ EDGE APPLIANCE ]
+                                          │
+                         MQTT Telemetry (JSON Coordinates, 3.25 KB/s)
+                                          ▼
+                                ┌───────────────────┐
+                                │ Ingestion Gateway │
+                                └─────────┬─────────┘
+                                          │
+                    ┌─────────────────────┼─────────────────────┐
+                    ▼                     ▼                     ▼
+          ┌───────────────────┐ ┌───────────────────┐ ┌───────────────────┐
+          │   Redis Pub/Sub   │ │ PostgreSQL Store  │ │    ClickHouse     │
+          │  Real-Time Cache  │ │ Relational Schema │ │ Trajectory Store  │
+          └─────────┬─────────┘ └─────────┬─────────┘ └─────────┬─────────┘
+                    │                     │                     │
+                    │ • Active Tracklets  │ • Stores & Cameras  │ • Metric Coordinates
+                    │ • Live Friction (z) │ • Zones & Fixtures  │ • Savitzky-Golay Dwell
+                    │ • Current Alerts    │ • Incidents/Actions │ • KDE Heatmap Points
+                    │ • Zone Occupancy    │ • A/B Experiments   │ • Markov Transitions
+                    └─────────────────────┼─────────────────────┘
+                                          │
+                                          ▼
+                             ┌─────────────────────────┐
+                             │ FastAPI / Django API    │
+                             └────────────┬────────────┘
+                                          │ WebSockets + REST
+                                          ▼
+                             ┌─────────────────────────┐
+                             │ Light-Mode Cockpit (UI) │
+                             └─────────────────────────┘
+```
+
+### Relational Schema Specification (PostgreSQL / Django ORM)
+
+```sql
+-- 1. Store Entity
+CREATE TABLE stores (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(255) NOT NULL,
+    code VARCHAR(50) UNIQUE NOT NULL, -- e.g., 'IN-BOM-042'
+    floor_plan_cad_url TEXT NOT NULL,
+    width_meters NUMERIC(6, 2) NOT NULL,
+    length_meters NUMERIC(6, 2) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 2. Camera Sensor Registration
+CREATE TABLE cameras (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    store_id UUID REFERENCES stores(id) ON DELETE CASCADE,
+    stream_url VARCHAR(255) NOT NULL, -- rtsp://192.168.1.x/live
+    camera_name VARCHAR(100) NOT NULL,
+    homography_matrix JSONB NOT NULL, -- 3x3 DLT H matrix
+    frustum_polygon JSONB NOT NULL,   -- 2D coverage boundary
+    fps_sampling INT DEFAULT 15,
+    is_active BOOLEAN DEFAULT TRUE
+);
+
+-- 3. Merchandise Zones & Aisle Geofences
+CREATE TABLE zones (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    store_id UUID REFERENCES stores(id) ON DELETE CASCADE,
+    zone_code VARCHAR(50) NOT NULL, -- e.g., 'Z_GROCERY_01'
+    name VARCHAR(100) NOT NULL,     -- 'Spices & Masala'
+    polygon_coords JSONB NOT NULL,  -- [[x1,y1], [x2,y2], ...] in meters
+    zone_type VARCHAR(50) NOT NULL, -- 'AISLE', 'ENDCAP', 'CHECKOUT', 'ENTRANCE'
+    department_tag VARCHAR(100)     -- 'Staples', 'Dairy', 'Snacks'
+);
+
+-- 4. Store Fixtures & Merchandising Placement
+CREATE TABLE fixtures (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    zone_id UUID REFERENCES zones(id) ON DELETE CASCADE,
+    fixture_type VARCHAR(50) NOT NULL, -- 'GONDOLA', 'PROMO_ISLAND', 'REGISTER'
+    position_geometry JSONB NOT NULL,  -- Impenetrable obstacle polygon
+    category_metadata JSONB,           -- Sponsored brand, stock category
+    is_temporary BOOLEAN DEFAULT FALSE -- Flag for temporary promotional stacks
+);
+
+-- 5. Real-Time & Historical Zone Metrics
+CREATE TABLE zone_metrics (
+    id BIGSERIAL PRIMARY KEY,
+    zone_id UUID REFERENCES zones(id) ON DELETE CASCADE,
+    timestamp_window TIMESTAMP WITH TIME ZONE NOT NULL,
+    traffic_count INT NOT NULL DEFAULT 0,
+    density_ratio NUMERIC(5, 2) NOT NULL,   -- Shoppers per m²
+    avg_dwell_seconds NUMERIC(6, 2) NOT NULL,
+    avg_speed_mps NUMERIC(4, 2) NOT NULL,
+    friction_score INT NOT NULL,            -- 0 to 100 Store Friction Score
+    epr_conversion_ratio NUMERIC(5, 2)      -- Engagement-to-Passby Ratio
+);
+
+-- 6. Operational Issues & Action Alerts
+CREATE TABLE issues (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    zone_id UUID REFERENCES zones(id) ON DELETE CASCADE,
+    issue_type VARCHAR(50) NOT NULL, -- 'BOTTLENECK', 'DEAD_ZONE', 'QUEUE_SPILL', 'FLOW_DROPOFF'
+    severity VARCHAR(20) NOT NULL,   -- 'HEALTHY', 'WATCH', 'FRICTION', 'CRITICAL'
+    friction_score INT NOT NULL,
+    causal_hint TEXT,                -- 'Congestion overlaps Promo Island A fixture'
+    prescribed_action TEXT NOT NULL, -- 'Open Register 5 immediately'
+    status VARCHAR(20) DEFAULT 'ACTIVE', -- 'ACTIVE', 'ACKNOWLEDGED', 'RESOLVED'
+    detected_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    resolved_at TIMESTAMP WITH TIME ZONE
+);
+
+-- 7. Layout A/B Experimentation Tracking
+CREATE TABLE experiments (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    store_id UUID REFERENCES stores(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL, -- 'Dairy Aisle Endcap Relocation Test'
+    description TEXT,
+    baseline_start TIMESTAMP WITH TIME ZONE NOT NULL,
+    baseline_end TIMESTAMP WITH TIME ZONE NOT NULL,
+    evaluation_start TIMESTAMP WITH TIME ZONE NOT NULL,
+    evaluation_end TIMESTAMP WITH TIME ZONE NOT NULL,
+    status VARCHAR(20) DEFAULT 'RUNNING' -- 'DRAFT', 'RUNNING', 'COMPLETED'
+);
+
+-- 8. Experiment Quantitative Verification Results
+CREATE TABLE experiment_metrics (
+    id BIGSERIAL PRIMARY KEY,
+    experiment_id UUID REFERENCES experiments(id) ON DELETE CASCADE,
+    metric_name VARCHAR(100) NOT NULL, -- 'Bottleneck Duration', 'Discovery Rate', 'Avg Dwell'
+    zone_id UUID REFERENCES zones(id),
+    before_value NUMERIC(10, 2) NOT NULL,
+    after_value NUMERIC(10, 2) NOT NULL,
+    change_percent NUMERIC(6, 2) NOT NULL, -- e.g. -62.5%
+    confidence_score NUMERIC(5, 2)         -- Statistical significance p-value
+);
+```
+
+---
+
+## 21. Pragmatic 7-Phase MVP Build Roadmap
+
+To translate the complete architectural specification into a reliable, working demonstration within rapid implementation windows, StoreFlow AI adopts a structured, milestone-driven **7-Phase Engineering Roadmap**:
+
+```
+[ Phase 1: Core CV ] ──► [ Phase 2: Map Setup ] ──► [ Phase 3: Metrics ] ──► [ Phase 4: Intelligence ]
+     YOLO + OC-SORT          Homography + CAD           Traffic + Dwell          Friction + Bottlenecks
+                                                                                           │
+                                                                                           ▼
+[ Phase 7: Experiments ] ◄── [ Phase 6: Actions ] ◄── [ Phase 5: Dashboard ] ◄─────────────┘
+  Before/After Verification     Prescriptive Cards        Light-Mode Digital Twin
+```
+
+### Detailed Phase Milestones & Success Criteria:
+
+1. **Phase 1 — Core Computer Vision Pipeline:**
+   - Ingest CCTV RTSP stream or pre-recorded MP4 via OpenCV / GStreamer hardware decoders.
+   - Run YOLOv10-Nano / YOLOv8 person detector to extract bounding boxes.
+   - Attach OC-SORT / ByteTrack tracking IDs to establish anonymous multi-frame tracklets.
+   - *Success Criterion:* Stable tracklet persistence without identity drift across crowded aisles.
+
+2. **Phase 2 — Metric Store Map Configuration:**
+   - Define store dimensions ($W \times L$) and load 2D CAD blueprint.
+   - Apply planar homography $\mathbf{H}$ using ground-contact ankle localization ($u_g, v_{max}$).
+   - Configure polygon boundaries for aisles, cash counters, endcaps, and promotional displays.
+   - *Success Criterion:* Every detected shopper is accurately mapped to metric coordinates $(X, Y)$ within $< 0.15\text{m}$ error.
+
+3. **Phase 3 — Spatial Quantification Engine:**
+   - Compute instantaneous walking velocity $v(t)$ and apply Savitzky-Golay polynomial smoothing.
+   - Implement the 4-state engagement classifier (`TRANSIT`, `MICRO_DWELL`, `MACRO_DWELL`, `QUEUE`).
+   - Log zone visitation counts, passage ratios, and aisle transition matrices.
+   - *Success Criterion:* True shelf-browsing engagement is mathematically separated from walking transit.
+
+4. **Phase 4 — Spatial Decision Intelligence:**
+   - Calculate continuous Gaussian Kernel Density Estimation (KDE) over a $0.25\text{m}$ grid.
+   - Implement fluid divergence $\nabla \cdot \vec{\mathbf{v}} < 0$ and compute the **Store Friction Score (0–100)** for all store zones.
+   - Flag isolated dead zones using Discovery Rate $D(k) < 0.08$ and detect flow drop-off choke points.
+   - *Success Criterion:* The system autonomously identifies store bottlenecks and neglected aisles without human intervention.
+
+5. **Phase 5 — Digital Twin Executive Dashboard:**
+   - Render the 2D CAD floor plan with live moving customer coordinate dots using Canvas / WebGL.
+   - Overlay real-time foot-traffic heatmaps (emerald green browsing to crimson choke hotspots).
+   - Display executive KPI summary tiles: Live Shoppers, Avg Dwell, Friction Risk, Active Alerts.
+   - *Success Criterion:* Store manager can visually grasp store dynamics in 5 seconds without viewing raw video feeds.
+
+6. **Phase 6 — Prescriptive Rule Engine & Contextual Dispatch:**
+   - Combine spatial kinematic alerts with fixture metadata to generate contextual causal attributions.
+   - Render actionable alert cards with 1-tap intervention prompts (*"Open Register 5"*, *"Relocate Promo Stack"*).
+   - Dispatch alerts via WebSockets and mobile push/chat notifications.
+   - *Success Criterion:* System shifts from passive monitoring to proactive operational decision support.
+
+7. **Phase 7 — Layout A/B Experimentation Engine:**
+   - Create baseline spatial snapshots before layout modifications.
+   - Record post-modification performance over comparable operational windows.
+   - Generate automated verification reports displaying before-vs-after delta metrics.
+   - *Success Criterion:* Store manager can empirically prove whether a physical layout alteration delivered business ROI.
+
+---
+
+## 22. Comprehensive Academic & Industrial Reference Index
 
 1. **Yifu Zhang, Peize Sun, Yi Jiang, Dongdong Yu, Fucheng Weng, Zehuan Yuan, Ping Luo.** *ByteTrack: Multi-Object Tracking by Associating Every Detection Box.* European Conference on Computer Vision (ECCV), 2022. [arXiv:2110.06864](https://arxiv.org/abs/2110.06864).
 2. **Ao Wang, Hui Chen, Li Shen, Tianhe Gu, Shaohui Lin, Guiguang Ding.** *YOLOv10: Real-Time End-to-End Object Detection.* NeurIPS, 2024. [arXiv:2405.14458](https://arxiv.org/abs/2405.14458).

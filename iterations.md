@@ -264,4 +264,23 @@ This document tracks the iterative design, research synthesis, mathematical form
 - **Feasibility & Cost Optimization:**
   - Guarantees maximum evaluation score across Problem Fit, Technical Rigor, Enterprise Feasibility, and Live Demonstration.
 
+---
+
+## Iteration 19: Architectural Synthesis of Vinish's Blueprint — The Store Graph, Friction Scoring & Physical A/B Verification
+- **Focus / Pillar:** Unifying Vinish's pragmatic product blueprint (`vinish.md`) with the rigorous deep-tech specification (`solution.md`), creating an unbeatable fusion of clear business positioning and academic computer vision rigor.
+- **Key Research & Sources:**
+  - *Vinish's StoreFlow Master Blueprint (`vinish.md`)*
+  - *Network Flow Models and Queuing Theory in Spatial Analytics*
+  - *Empirical Physical A/B Testing in Retail Environments*
+- **Architectural Breakthrough:**
+  - **The Store Graph Mental Model:** Formulated the store as an interconnected road network ("Waze for the inside of a store"), translating physical aisles, sections, junctions, and bottlenecks into a formal spatial graph $G = (V, E)$.
+  - **The Store Friction Score (0–100):** Condensed complex tensor divergence and baseline deviations into a single intuitive executive RAG index per zone (**0–20 🟢 Healthy**, **20–40 🟡 Watch**, **40–70 🟠 Friction**, **70–100 🔴 Critical**).
+  - **Contextual Causal Attribution ("Why Does a Problem Happen?"):** Fused CV kinematic anomalies with manager-configured fixture metadata to provide honest, defensible "cause hints" rather than false AI certainty.
+  - **Flow Drop-off Detection:** Diagnosed fixtures that attract high initial engagement but arrest onward footfall into connected merchandise corridors.
+  - **Physical Store A/B Testing (Layout Experimentation Engine):** Closed the **Observe → Diagnose → Prescribe → Verify** loop by adding baseline snapshotting and automated before-vs-after delta verification reports.
+  - **Unified Data Schema & 7-Phase MVP Roadmap:** Added complete PostgreSQL relational models, Redis pub/sub schemas, and a milestone-driven 7-phase build plan to guide rapid hackathon execution.
+- **Feasibility & Cost Optimization:**
+  - Bridges the academic computer vision defense with an immediately codeable, demo-ready full-stack software implementation that any developer team can build and ship in 48 hours.
+
+
 
